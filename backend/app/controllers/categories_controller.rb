@@ -1,12 +1,7 @@
 class CategoriesController < ApplicationController
-    def show 
-        begin
-            @category = Category.find(params.fetch(:id, nil))
-        rescue
-            render status: "400", json: {"message": "category not found"}
-            return
-        end 
+    before_action :find_category, only: [:show, :update, :destroy]
 
+    def show 
         render status: "200", json: @category
     end
 
@@ -37,13 +32,6 @@ class CategoriesController < ApplicationController
     end
 
     def update
-        begin
-            @category = Category.find(params.fetch(:id, nil))
-        rescue
-            render status: "400", json: {"message": "category not found"}
-            return
-        end
-
         if @category.update!(params.permit(:schema, :name, :parent_category_id))
             render status: "200", json: @category
         else 
@@ -52,14 +40,16 @@ class CategoriesController < ApplicationController
     end
 
     def destroy
+        @category.destroy
+        render status: "200", json: {"message": "category deleted"}
+    end
+
+    def find_category
         begin
             @category = Category.find(params.fetch(:id, nil))
         rescue
             render status: "400", json: {"message": "category not found"}
             return
         end
-
-        @category.destroy
-        render status: "200", json: {"message": "category deleted"}
     end
 end
