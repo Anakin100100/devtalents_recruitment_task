@@ -9,7 +9,8 @@ class CategoriesController < ApplicationController
         begin
             parsed_schema = JSON.parse(params.fetch(:schema, nil))
         rescue => exception
-            render status: "400", json: {"message": "unable to parse schema"}.to_json()
+            render status: "400", json: {"message": "unable to parse schema"}
+            return
         end
 
         @category = Category.new(
