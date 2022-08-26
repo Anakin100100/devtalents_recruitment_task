@@ -8,8 +8,9 @@ import {
   Routes,
   Route,
 } from "react-router-dom";
-import Expenses from "./routes/expenses";
-import Invoices from "./routes/invoices";
+import Categories from "./routes/categories";
+import Products from "./routes/products";
+import CategoryProductInfos from './routes/category_product_infos';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -17,8 +18,9 @@ root.render(
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<App />} />
-        <Route path="expenses" element={<Expenses />} />
-        <Route path="invoices" element={<Invoices />} />
+        <Route path="/products" element={<Products />} />
+        <Route path="/categories" element={<Categories />} />
+        <Route path="/product_category_infos" element={<CategoryProductInfos />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>
