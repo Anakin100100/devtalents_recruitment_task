@@ -1,7 +1,7 @@
-import ButtonList from "../components/ButtonList";
-import Header from "../components/Header";
+import ButtonList from "../../components/ButtonList";
+import Header from "../../components/Header";
 
-export default function CategoryProductInfos() {
+export default function Products() {
     let links_data = [
         {
             "link_to": "/",
@@ -14,7 +14,7 @@ export default function CategoryProductInfos() {
             <Header />
             <ButtonList links={links_data} />
             <div>
-                <h2 className="text-center">Product Category Infos</h2>
+                <h2 className="text-center">Products</h2>
             </div>
         </div>
     );

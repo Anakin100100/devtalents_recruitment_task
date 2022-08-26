@@ -11,7 +11,7 @@ export default function App() {
       "link_text": "Products"
     },
     {
-      "link_to": "/product_category_infos",
+      "link_to": "/category_product_infos",
       "link_text": "Product Category Infos"
     }
   ]
