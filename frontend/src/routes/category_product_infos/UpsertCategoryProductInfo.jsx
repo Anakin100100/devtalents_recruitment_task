@@ -3,7 +3,7 @@ import ButtonList from "../../components/ButtonList";
 import Header from "../../components/Header";
 
 const UpsertCategoryProductInfo = () => {
-    let links_data = [
+    const links_data = [
         {
             "link_to": "/category_product_infos",
             "link_text": "Category Product Infos"

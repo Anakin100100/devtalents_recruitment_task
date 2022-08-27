@@ -2,10 +2,14 @@ import ButtonList from "../../components/ButtonList";
 import Header from "../../components/Header";
 
 export default function Categories() {
-    let links_data = [
+    const links_data = [
         {
             "link_to": "/",
             "link_text": "Main"
+        },
+        {
+            "link_to": "/categories/upsert/-1",
+            "link_text": "New Category"
         }
     ]
 

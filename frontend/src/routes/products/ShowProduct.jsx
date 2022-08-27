@@ -3,7 +3,7 @@ import ButtonList from "../../components/ButtonList";
 import Header from "../../components/Header";
 
 const ShowProduct = () => {
-    let links_data = [
+    const links_data = [
         {
             "link_to": "/products",
             "link_text": "Products"

@@ -3,7 +3,7 @@ import ButtonList from "../../components/ButtonList";
 import Header from "../../components/Header";
 
 const ShowCategory = () => {
-    let links_data = [
+    const links_data = [
         {
             "link_to": "/categories",
             "link_text": "Categories"

@@ -2,7 +2,7 @@ import ButtonList from "../../components/ButtonList";
 import Header from "../../components/Header";
 
 export default function Products() {
-    let links_data = [
+    const links_data = [
         {
             "link_to": "/",
             "link_text": "Main"

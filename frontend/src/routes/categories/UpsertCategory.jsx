@@ -1,24 +1,17 @@
 import React from 'react'
-import ButtonList from "../../components/ButtonList";
-import Header from "../../components/Header";
+import NewCategoryForm from '../../components/categories/NewCategoryForm';
+import EditCategoryForm from '../../components/categories/EditCategoryForm';
+import { useParams } from "react-router-dom";
 
 const UpsertCategory = () => {
-    let links_data = [
-        {
-            "link_to": "/categories",
-            "link_text": "Categories"
-        }
-    ]
+    let params = useParams();
 
-    return (
-        <div>
-            <Header />
-            <ButtonList links={links_data} />
-            <div className='text-center'>
-                UpsertCategory
-            </div>
-        </div>
-    )
+    console.log(params)
+    if (params["id"] === "-1") {
+        return <NewCategoryForm />
+    } else {
+        return <EditCategoryForm category_id={params["id"]} />
+    }
 }
 
 export default UpsertCategory

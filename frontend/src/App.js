@@ -1,7 +1,7 @@
 import ButtonList from "./components/ButtonList";
 import Header from "./components/Header";
 export default function App() {
-  let links_data = [
+  const links_data = [
     {
       "link_to": "/categories",
       "link_text": "Categories"
