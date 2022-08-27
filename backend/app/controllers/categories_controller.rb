@@ -6,6 +6,7 @@ class CategoriesController < ApplicationController
     end
 
     def create
+        debugger
         @category = Category.new(
             parent_category_id: params.fetch(:parent_category_id, nil),
             name: params.fetch(:name, nil),
