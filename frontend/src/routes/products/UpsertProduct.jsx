@@ -1,24 +1,17 @@
 import React from 'react'
-import ButtonList from "../../components/ButtonList";
-import Header from "../../components/Header";
+import EditProductForm from '../../components/products/EditProductForm';
+import NewProductForm from '../../components/products/NewProductFrom';
+import { useParams } from "react-router-dom";
 
 const UpsertProduct = () => {
-    const links_data = [
-        {
-            "link_to": "/products",
-            "link_text": "Products"
-        }
-    ]
+    let params = useParams();
 
-    return (
-        <div>
-            <Header />
-            <ButtonList links={links_data} />
-            <div>
-                <h2 className="text-center">UpsertProduct</h2>
-            </div>
-        </div>
-    );
+    console.log(params)
+    if (params["id"] === "-1") {
+        return <NewProductForm />
+    } else {
+        return <EditProductForm product_id={params["id"]} />
+    }
 }
 
 export default UpsertProduct

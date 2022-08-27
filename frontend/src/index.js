@@ -9,13 +9,10 @@ import {
   Route,
 } from "react-router-dom";
 import Categories from "./routes/categories/Categories";
-import ShowCategory from './routes/categories/ShowCategory';
 import UpsertCategory from './routes/categories/UpsertCategory';
 import Products from "./routes/products/Products";
-import ShowProduct from './routes/products/ShowProduct';
 import UpsertProduct from './routes/products/UpsertProduct';
 import CategoryProductInfos from './routes/category_product_infos/CategoryProductInfos';
-import ShowCategoryProductInfo from './routes/category_product_infos/ShowCategoryProductInfo';
 import UpsertCategoryProductInfo from './routes/category_product_infos/UpsertCategoryProductInfo';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -28,11 +25,8 @@ root.render(
         <Route path="/categories" element={<Categories />} />
         <Route path="/category_product_infos" element={<CategoryProductInfos />} />
         <Route path="/products/upsert/:id" element={<UpsertProduct />} />
-        <Route path="/products/show/:id" element={<ShowProduct />} />
         <Route path="/categories/upsert/:id" element={<UpsertCategory />} />
-        <Route path="/categories/show/:id" element={<ShowCategory />} />
         <Route path="/category_product_infos/upsert/:id" element={<UpsertCategoryProductInfo />} />
-        <Route path="/category_product_infos/show/:id" element={<ShowCategoryProductInfo />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>
