@@ -8,13 +8,13 @@ import {
   Routes,
   Route,
 } from "react-router-dom";
-import Categories from "./routes/categories/categories";
+import Categories from "./routes/categories/Categories";
 import ShowCategory from './routes/categories/ShowCategory';
 import UpsertCategory from './routes/categories/UpsertCategory';
-import Products from "./routes/products/products";
+import Products from "./routes/products/Products";
 import ShowProduct from './routes/products/ShowProduct';
 import UpsertProduct from './routes/products/UpsertProduct';
-import CategoryProductInfos from './routes/category_product_infos/category_product_infos';
+import CategoryProductInfos from './routes/category_product_infos/CategoryProductInfos';
 import ShowCategoryProductInfo from './routes/category_product_infos/ShowCategoryProductInfo';
 import UpsertCategoryProductInfo from './routes/category_product_infos/UpsertCategoryProductInfo';
 
