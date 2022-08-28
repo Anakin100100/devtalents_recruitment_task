@@ -23,6 +23,7 @@ export default function App() {
   const [products, setProducts] = useState({})
   const [isLoading, setIsLoading] = useState(true);
   const [currentCategoryId, setCurrentCategoryId] = useState(0)
+  const [currentCategoryName, setCurrentCategoryName] = useState("")
   const [history, setHistory] = useState([])
 
   useEffect(() => {
@@ -38,8 +39,9 @@ export default function App() {
         let current_category_request_response = await fetch(`http://localhost:3000/get_root_category_id`, current_category_request_options)
         let current_category_request_data = await current_category_request_response.json()
         setCurrentCategoryId(current_category_request_data.id)
-        current_id = current_category_request_data.id
-        console.log(`current category id is ${current_category_request_data.id}`)
+        setCurrentCategoryName(current_category_request_data.name)
+        current_id = current_category_request_data.id.id
+        console.log(`current category id is ${current_id}`)
       }
 
       setHistory([...history, currentCategoryId])
@@ -53,7 +55,7 @@ export default function App() {
 
       const products_options = { method: 'GET' };
 
-      let products_response = await fetch(`http://localhost:3000/categories/get_sub_categories/${current_id}`, products_options)
+      let products_response = await fetch(`http://localhost:3000/get_products_from_a_category_and_all_subcategories/${current_id}`, products_options)
       let products_data = await products_response.json()
       console.log("products:")
       console.log(products_data)
@@ -86,6 +88,8 @@ export default function App() {
                 }}>
                   Go Back
                 </button>
+                <br />
+                <p>Current category: {currentCategoryName}</p>
               </div>
               {categories.map((category) => (
                 <div className="flex" key={category.id}>

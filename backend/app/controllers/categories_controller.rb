@@ -1,5 +1,5 @@
 class CategoriesController < ApplicationController
-    before_action :find_category, only: [:show, :update, :destroy]
+    before_action :find_category, only: [:show, :update, :destroy, :get_products_from_a_category_and_all_subcategories]
 
     def show 
         render status: "200", json: @category
@@ -129,11 +129,53 @@ class CategoriesController < ApplicationController
     end
 
     def get_root_category_id
-        render status: "200", json: {"id": Category.where(parent_category_id: nil).first.id}
+        render status: "200", json: {"id": Category.where(parent_category_id: nil).first}
     end
 
     def get_sub_categories
         render status: "200", json: Category.where(parent_category_id: params[:id]).all
+    end
+
+    def get_products_from_a_category_and_all_subcategories
+        subcategories = [[@category]]
+        new_subcategories = Category.where(parent_category_id: @category.id)
+        subcategories << new_subcategories
+        iteration = 2
+
+        while true
+            new_subcategories = []
+            found_any_new_subcategories = false
+
+            subcategories[iteration - 1].each do |subcategory|
+                subcategories_for_subcategory = Category.where(parent_category_id: subcategory.id)
+                if subcategories_for_subcategory.empty? == true 
+                    next
+                end
+
+                found_any_new_subcategories = true
+
+                subcategories_for_subcategory.each do |subcategory_for_subcategory|
+                    new_subcategories << subcategory_for_subcategory
+                end
+            end
+
+            if found_any_new_subcategories == false 
+                break
+            end
+
+            subcategories << new_subcategories
+            iteration += 1
+        end
+
+        subcategories_ids_array = []
+
+        subcategories.each do |subcategories_array|
+            subcategories_array.each do |subcategory|
+                subcategories_ids_array << subcategory.id
+            end
+        end
+
+        render status: "200", json: Product.where(category_id: subcategories_ids_array)
     end
 
     def find_category
