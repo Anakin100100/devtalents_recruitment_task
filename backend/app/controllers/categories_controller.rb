@@ -13,6 +13,26 @@ class CategoriesController < ApplicationController
             return
         end
 
+        begin
+            parsed_schema = JSON.parse(params[:schema])
+            parsed_schema.each do |key, value|
+                if key == "" || value == ""
+                    render status: "400", json: {"message": "none of the fields can be empty"}
+                    return 
+                end
+
+                if ["DECIMAL", "INTEGER", "BOOLEAN"].include? value 
+                    next
+                end
+
+                render status: "400", json: {"message": "invalid '#{key}' field value: '#{value}'"}
+                return 
+            end
+        rescue 
+            render status: "400", json: {"message": "unable to parse schema"}
+            return
+        end
+
         @category = Category.new(
             parent_category_id: params.fetch(:parent_category_id, nil),
             name: params.fetch(:name, nil),
@@ -32,6 +52,34 @@ class CategoriesController < ApplicationController
     end
 
     def update
+        begin
+            @parent_cateogry = Category.find(params.fetch(:parent_category_id, nil))
+        rescue 
+            render status: "400", json: {"message": "parent category not found"}
+            return
+        end
+
+        begin
+            parsed_schema = JSON.parse(params[:schema])
+            parsed_schema.each do |key, value|
+                if key == "" || value == ""
+                    render status: "400", json: {"message": "none of the fields can be empty"}
+                    return 
+                end
+
+                if ["DECIMAL", "INTEGER", "BOOLEAN"].include? value 
+                    next
+                end
+
+                render status: "400", json: {"message": "invalid '#{key}' field value: '#{value}'"}
+                return 
+            end
+        rescue 
+            render status: "400", json: {"message": "unable to parse schema"}
+            return
+        end
+
+
         if @category.update!(params.permit(:schema, :name, :parent_category_id))
             render status: "200", json: @category
         else 
@@ -68,6 +116,12 @@ class CategoriesController < ApplicationController
 
             subcategories << new_subcategories
             iteration += 1
+        end
+
+        subcategories.each do |subcategories_array|
+            subcategories_array.each do |subcategory|
+                subcategory.destroy
+            end
         end
 
         @category.destroy

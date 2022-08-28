@@ -27,7 +27,7 @@ const NewCategoryProductInfoForm = () => {
         const options = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: `{"category_id":"${category_id}","values":"${values}","product_id":${product_id}}`
+            body: `{"category_id":"${category_id}","values":${values},"product_id":${product_id}}`
         };
 
         let response = await fetch('http://localhost:3000/category_product_infos', options)

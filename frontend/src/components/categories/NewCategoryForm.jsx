@@ -26,7 +26,7 @@ const NewCategoryForm = () => {
         const options = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: `{"schema":"${schema}","name":"${name}","parent_category_id":${parent_category_id}}`
+            body: `{"schema":${schema},"name":"${name}","parent_category_id":${parent_category_id}}`
         };
 
         let response = await fetch('http://localhost:3000/categories', options)
