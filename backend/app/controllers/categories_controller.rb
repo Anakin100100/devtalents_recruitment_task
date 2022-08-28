@@ -40,6 +40,36 @@ class CategoriesController < ApplicationController
     end
 
     def destroy
+        subcategories = []
+        new_subcategories = Category.where(parent_category_id: @category.id)
+        subcategories << new_subcategories
+        iteration = 1
+
+        while true
+            new_subcategories = []
+            found_any_new_subcategories = false
+
+            subcategories[iteration - 1].each do |subcategory|
+                subcategories_for_subcategory = Category.where(parent_category_id: subcategory.id)
+                if subcategories_for_subcategory.empty? == true 
+                    next
+                end
+
+                found_any_new_subcategories = true
+
+                subcategories_for_subcategory.each do |subcategory_for_subcategory|
+                    new_subcategories << subcategory_for_subcategory
+                end
+            end
+
+            if found_any_new_subcategories == false 
+                break
+            end
+
+            subcategories << new_subcategories
+            iteration += 1
+        end
+
         @category.destroy
         render status: "200", json: {"message": "category deleted"}
     end
