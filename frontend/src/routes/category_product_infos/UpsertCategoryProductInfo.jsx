@@ -1,24 +1,17 @@
 import React from 'react'
-import ButtonList from "../../components/ButtonList";
-import Header from "../../components/Header";
+import NewCategoryProductInfoForm from '../../components/category_product_infos/NewCategoryProductInfoForm';
+import EditCategoryProductInfoForm from '../../components/category_product_infos/EditCategoryProductInfoForm';
+import { useParams } from "react-router-dom";
 
 const UpsertCategoryProductInfo = () => {
-    const links_data = [
-        {
-            "link_to": "/category_product_infos",
-            "link_text": "Category Product Infos"
-        }
-    ]
+    let params = useParams();
 
-    return (
-        <div>
-            <Header />
-            <ButtonList links={links_data} />
-            <div>
-                <h2 className="text-center">UpsertCategoryProductInfos</h2>
-            </div>
-        </div>
-    )
+    console.log(params)
+    if (params["id"] === "-1") {
+        return <NewCategoryProductInfoForm />
+    } else {
+        return <EditCategoryProductInfoForm category_product_info_id={params["id"]} />
+    }
 }
 
 export default UpsertCategoryProductInfo

@@ -7,7 +7,6 @@ class CategoryProductInfosController < ApplicationController
 
     def create 
         validate_values_are_parsable()
-
         begin
             @category = Category.find(params.fetch(:category_id, nil))
         rescue
@@ -44,10 +43,26 @@ class CategoryProductInfosController < ApplicationController
     def update
         validate_values_are_parsable()
 
-        if @category_product_info.update!(params.permit(:values))
+        begin
+            @category = Category.find(params.fetch(:category_id, nil))
+        rescue
+            render status: "400", json: {"message": "category not found"}
+            return
+        end
+
+        begin
+            @product = Product.find(params.fetch(:product_id, nil))
+        rescue
+            render status: "400", json: {"message": "product not found"}
+            return
+        end
+
+        if @category_product_info.update!(params.permit(:values, :category_id, :product_id))
             render status: "200", json: @category_product_info
+            return
         else 
             render status: "400", json: {"errors": @category_product_info.errors.full_messages}
+            return
         end
     end
 
@@ -65,10 +80,10 @@ class CategoryProductInfosController < ApplicationController
         end
     end
 
-    def validate_values_are_parsable
+    def validate_values_are_parsable()
         begin
             parsed_values = JSON.parse(params.fetch(:values, nil))
-        rescue => exception
+        rescue
             render status: "400", json: {"message": "unable to parse values"}
             return
         end
