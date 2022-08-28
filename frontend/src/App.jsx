@@ -74,7 +74,7 @@ export default function App() {
 
       const products_options = {
         method: "POST",
-        body: {
+        body: JSON.stringify({
           filters: [
             {
               field: firstFilterField,
@@ -92,7 +92,7 @@ export default function App() {
               value: thirdFilterValue,
             },
           ],
-        },
+        }),
       };
 
       let products_response = await fetch(

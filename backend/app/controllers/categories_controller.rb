@@ -1,3 +1,13 @@
+class String
+    def integer?
+        Integer(self)
+        return true
+    rescue ArgumentError
+        return false
+    end
+end
+  
+
 class CategoriesController < ApplicationController
     before_action :find_category, only: [:show, :update, :destroy, :get_products_from_a_category_and_all_subcategories]
 
@@ -175,7 +185,97 @@ class CategoriesController < ApplicationController
             end
         end
 
-        render status: "200", json: Product.where(category_id: subcategories_ids_array).to_json(include: :category_product_infos)
+        @products = Product.where(category_id: subcategories_ids_array).to_json(include: :category_product_infos)
+        filters = JSON.parse(request.body.read)
+        active_filters = []
+        filters["filters"].each do |filter|
+            if filter["field"] == "" 
+                next
+            end
+            if [">=", ">", "<", "<=", "==", "!="].include? filter["operator"] == false 
+                render status: "400", json: {"message": "invalid filter operator"}
+                return  
+            end
+            if ["true", "false"].include? filter["value"] == false && filter["value"].integer? == false 
+                render status: "400", json: {"message": "invalid filter value"}
+                return  
+            end
+            if ["true", "false"].include? filter["value"] == true && (["==", "!="].include? filter["operator"]) == false 
+                render status: "400", json: {"message": "invalid filter value for boolena filter"}
+                return  
+            end
+            active_filters << filter
+        end
+
+        @products = JSON.parse(@products)
+        active_filters.each do |filter|
+            filtered_products = []
+
+            @products.each do |product|
+                any_matched_filter = false 
+                product["category_product_infos"].each do |key, value|
+                    debugger
+                    if key == filter["field"]
+                        if filter["value"].integer? 
+                            if filter["operator"] == "=="
+                                if filter["value"].to_i == value.to_i 
+                                    any_matched_filter = true
+                                end
+                            end
+                            if filter["operator"] == "!="
+                                if filter["value"].to_i != value.to_i 
+                                    any_matched_filter = true
+                                end
+                            end
+                            if filter["operator"] == ">="
+                                if filter["value"].to_i >= value.to_i 
+                                    any_matched_filter = true
+                                end
+                            end
+                            if filter["operator"] == ">"
+                                if filter["value"].to_i > value.to_i 
+                                    any_matched_filter = true
+                                end
+                            end
+                            if filter["operator"] == "<"
+                                if filter["value"].to_i == value.to_i 
+                                    any_matched_filter = true
+                                end
+                            end
+                            if filter["operator"] == "<="
+                                if filter["value"].to_i <= value.to_i 
+                                    any_matched_filter = true
+                                end
+                            end
+                        else 
+                            if filter["operator"] == "=="
+                                if filter["value"] == "true" && value == true 
+                                    any_matched_filter = true
+                                end
+                                if filter["value"] == "false" && value == false 
+                                    any_matched_filter = true
+                                end
+                            else 
+                                if filter["value"] == "false" && value == true 
+                                    any_matched_filter = true
+                                end
+                                if filter["value"] == "true" && value == false 
+                                    any_matched_filter = true
+                                end
+                            end
+                        end
+                    end
+                end
+
+                if any_matched_filter == true 
+                    filtered_products << product
+                end
+            end
+
+            @products = filtered_products
+        end
+
+        render status: "200", json: @products
     end
 
     def find_category
