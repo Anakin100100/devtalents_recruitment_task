@@ -34,6 +34,7 @@ export default function App() {
   const [thirdFilterOperator, setThirdFilterOperator] = useState("");
   const [thirdFilterValue, setThirdFilterValue] = useState("");
   const [filtersError, setFiltersError] = useState("");
+  const [updateProductStatem, setUpdateProductsState] = useState(false);
   const [history, setHistory] = useState([]);
 
   useEffect(() => {
@@ -71,22 +72,47 @@ export default function App() {
       console.log(data);
       setCategories(data);
 
-      const products_options = { method: "GET" };
+      const products_options = {
+        method: "POST",
+        body: {
+          filters: [
+            {
+              field: firstFilterField,
+              operator: firstFilterOperator,
+              value: firstFilterValue,
+            },
+            {
+              field: secondFilterField,
+              operator: secondFilterOperator,
+              value: secondFilterValue,
+            },
+            {
+              field: thirdFilterField,
+              operator: thirdFilterOperator,
+              value: thirdFilterValue,
+            },
+          ],
+        },
+      };
 
       let products_response = await fetch(
         `http://localhost:3000/get_products_from_a_category_and_all_subcategories/${current_id}`,
         products_options
       );
       let products_data = await products_response.json();
-      console.log("products:");
-      console.log(products_data);
-      setProducts(products_data);
+      if (products_response.ok === true) {
+        console.log("products:");
+        console.log(products_data);
+        setProducts(products_data);
+      } else {
+        setFiltersError(products_data);
+      }
 
       setIsLoading(false);
     };
 
     fetchData();
-  }, [currentCategoryId]);
+  }, [currentCategoryId, updateProductStatem]);
 
   return (
     <div>
@@ -225,40 +251,7 @@ export default function App() {
               <div className="flex">
                 <button
                   onClick={async () => {
-                    const products_options = {
-                      method: "GET",
-                      body: {
-                        filters: [
-                          {
-                            field: firstFilterField,
-                            operator: firstFilterOperator,
-                            value: firstFilterValue,
-                          },
-                          {
-                            field: secondFilterField,
-                            operator: secondFilterOperator,
-                            value: secondFilterValue,
-                          },
-                          {
-                            field: thirdFilterField,
-                            operator: thirdFilterOperator,
-                            value: thirdFilterValue,
-                          },
-                        ],
-                      },
-                    };
-                    let products_response = await fetch(
-                      `http://localhost:3000/get_products_from_a_category_and_all_subcategories/${currentCategoryId}`,
-                      products_options
-                    );
-                    let products_data = await products_response.json();
-                    if (products_response.ok === true) {
-                      console.log("products:");
-                      console.log(products_data);
-                      setProducts(products_data);
-                    } else {
-                      setFiltersError(products_data);
-                    }
+                    setUpdateProductsState(!updateProductStatem);
                   }}
                   className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-2"
                 >
