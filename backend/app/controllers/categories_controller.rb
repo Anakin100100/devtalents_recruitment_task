@@ -128,6 +128,14 @@ class CategoriesController < ApplicationController
         render status: "200", json: {"message": "category deleted"}
     end
 
+    def get_root_category_id
+        render status: "200", json: {"id": Category.where(parent_category_id: nil).first.id}
+    end
+
+    def get_sub_categories
+        render status: "200", json: Category.where(parent_category_id: params[:id]).all
+    end
+
     def find_category
         begin
             @category = Category.find(params.fetch(:id, nil))
