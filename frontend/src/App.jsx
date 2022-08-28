@@ -136,12 +136,27 @@ export default function App() {
                     <th>Id</th>
                     <th>CategoryId</th>
                     <th>Name</th>
+                    <th>Values</th>
                   </tr>
                   {products.map((product) => (
                     <tr key={product.id}>
                       <th>{product.id}</th>
                       <th>{product.category_id}</th>
                       <th>{product.name}</th>
+                      <th>
+                        {((product) => {
+                          let values = [];
+                          console.log(product);
+                          product.category_product_infos.forEach((element) => {
+                            for (const [key, value] of Object.entries(
+                              JSON.parse(element.values)
+                            )) {
+                              values.push(`"${key}":"${value}"`);
+                            }
+                          });
+                          return values.join("\n");
+                        })(product)}
+                      </th>
                     </tr>
                   ))}
                 </tbody>

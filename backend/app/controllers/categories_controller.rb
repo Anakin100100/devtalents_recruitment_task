@@ -175,7 +175,7 @@ class CategoriesController < ApplicationController
             end
         end
 
-        render status: "200", json: Product.where(category_id: subcategories_ids_array)
+        render status: "200", json: Product.where(category_id: subcategories_ids_array).to_json(include: :category_product_infos)
     end
 
     def find_category
