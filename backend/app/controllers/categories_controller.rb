@@ -6,7 +6,13 @@ class CategoriesController < ApplicationController
     end
 
     def create
-        debugger
+        begin
+            @parent_cateogry = Category.find(params.fetch(:parent_category_id, nil))
+        rescue 
+            render status: "400", json: {"message": "parent category not found"}
+            return
+        end
+
         @category = Category.new(
             parent_category_id: params.fetch(:parent_category_id, nil),
             name: params.fetch(:name, nil),

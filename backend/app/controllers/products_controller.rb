@@ -31,6 +31,13 @@ class ProductsController < ApplicationController
     end
 
     def update
+        begin
+            @category = Category.find(params.fetch(:category_id, nil))
+        rescue
+            render status: "400", json: {"message": "category not found"}
+            return
+        end
+        
         if @product.update!(params.permit(:name))
             render status: "200", json: @product
         else 
