@@ -53,8 +53,6 @@ export default function App() {
         );
         let current_category_request_data =
           await current_category_request_response.json();
-        console.log("response data");
-        console.log(current_category_request_data.id.id);
         setCurrentCategoryId(current_category_request_data.id.id);
         current_id = current_category_request_data.id.id;
         setCurrentCategoryName(current_category_request_data.id.name);
@@ -68,8 +66,6 @@ export default function App() {
         options
       );
       let data = await response.json();
-      console.log("categories:");
-      console.log(data);
       setCategories(data);
 
       const products_options = {
@@ -100,10 +96,11 @@ export default function App() {
         products_options
       );
       let products_data = await products_response.json();
+      console.log("products data:");
+      console.log(products_data);
       if (products_response.ok === true) {
-        console.log("products:");
-        console.log(products_data);
         setProducts(products_data);
+        setFiltersError("");
       } else {
         setFiltersError(products_data);
       }
@@ -119,7 +116,7 @@ export default function App() {
       <Header />
       <ButtonList links={links_data} />
       <div className="flex flex-grow mt-4">
-        <div className="flex bg-cyan-200 w-1/4">
+        <div className="flex bg-cyan-200 w-1/4 justify-center">
           {isLoading ? (
             <LoadingSpinner />
           ) : (
@@ -259,7 +256,7 @@ export default function App() {
                 </button>
               </div>
               <div className="flex">
-                <p>{filtersError}</p>
+                <p>{filtersError.message}</p>
               </div>
             </div>
           )}

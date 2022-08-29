@@ -192,15 +192,15 @@ class CategoriesController < ApplicationController
             if filter["field"] == "" 
                 next
             end
-            if [">=", ">", "<", "<=", "==", "!="].include? filter["operator"] == false 
+            if ([">=", ">", "<", "<=", "==", "!="].include? filter["operator"]) == false 
                 render status: "400", json: {"message": "invalid filter operator"}
                 return  
             end
-            if ["true", "false"].include? filter["value"] == false && filter["value"].integer? == false 
+            if (["true", "false"].include? filter["value"]) == false && (filter["value"].integer?) == false 
                 render status: "400", json: {"message": "invalid filter value"}
                 return  
             end
-            if ["true", "false"].include? filter["value"] == true && (["==", "!="].include? filter["operator"]) == false 
+            if (["true", "false"].include? filter["value"]) == true && (["==", "!="].include? filter["operator"]) == false 
                 render status: "400", json: {"message": "invalid filter value for boolena filter"}
                 return  
             end
@@ -213,54 +213,60 @@ class CategoriesController < ApplicationController
 
             @products.each do |product|
                 any_matched_filter = false 
-                product["category_product_infos"].each do |key, value|
-                    debugger
-                    if key == filter["field"]
-                        if filter["value"].integer? 
-                            if filter["operator"] == "=="
-                                if filter["value"].to_i == value.to_i 
-                                    any_matched_filter = true
+                values = []
+                product["category_product_infos"].each do |category_product_info|
+                    value = JSON.parse(category_product_info["values"])
+                    values << value
+                end
+                values.each do |value_item|
+                    value_item.each do |key, value|
+                        if key == filter["field"]
+                            if filter["value"].integer? 
+                                if filter["operator"] == "=="
+                                    if filter["value"].to_i == value.to_i 
+                                        any_matched_filter = true
+                                    end
                                 end
-                            end
-                            if filter["operator"] == "!="
-                                if filter["value"].to_i != value.to_i 
-                                    any_matched_filter = true
+                                if filter["operator"] == "!="
+                                    if filter["value"].to_i != value.to_i 
+                                        any_matched_filter = true
+                                    end
                                 end
-                            end
-                            if filter["operator"] == ">="
-                                if filter["value"].to_i >= value.to_i 
-                                    any_matched_filter = true
+                                if filter["operator"] == ">="
+                                    if  value.to_i >= filter["value"].to_i
+                                        any_matched_filter = true
+                                    end
                                 end
-                            end
-                            if filter["operator"] == ">"
-                                if filter["value"].to_i > value.to_i 
-                                    any_matched_filter = true
+                                if filter["operator"] == ">"
+                                    if  value.to_i > filter["value"].to_i 
+                                        any_matched_filter = true
+                                    end
                                 end
-                            end
-                            if filter["operator"] == "<"
-                                if filter["value"].to_i == value.to_i 
-                                    any_matched_filter = true
+                                if filter["operator"] == "<"
+                                    if  value.to_i < filter["value"].to_i 
+                                        any_matched_filter = true
+                                    end
                                 end
-                            end
-                            if filter["operator"] == "<="
-                                if filter["value"].to_i <= value.to_i 
-                                    any_matched_filter = true
-                                end
-                            end
-                        else 
-                            if filter["operator"] == "=="
-                                if filter["value"] == "true" && value == true 
-                                    any_matched_filter = true
-                                end
-                                if filter["value"] == "false" && value == false 
-                                    any_matched_filter = true
+                                if filter["operator"] == "<="
+                                    if  value.to_i <= filter["value"].to_i 
+                                        any_matched_filter = true
+                                    end
                                 end
                             else 
-                                if filter["value"] == "false" && value == true 
-                                    any_matched_filter = true
-                                end
-                                if filter["value"] == "true" && value == false 
-                                    any_matched_filter = true
+                                if filter["operator"] == "=="
+                                    if filter["value"] == "true" && value == true 
+                                        any_matched_filter = true
+                                    end
+                                    if filter["value"] == "false" && value == false 
+                                        any_matched_filter = true
+                                    end
+                                else 
+                                    if filter["value"] == "false" && value == true 
+                                        any_matched_filter = true
+                                    end
+                                    if filter["value"] == "true" && value == false 
+                                        any_matched_filter = true
+                                    end
                                 end
                             end
                         end
